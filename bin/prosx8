@@ -1,0 +1,20 @@
+#!/bin/bash
+
+
+prosx8_list=$(ls /project/ProSX8/worktrees | grep stevens | sed 's/stevens.//')
+
+checkout=""
+if [ "$1" == "-list" ]; then
+  echo "$prosx8_list"
+  exit 0
+else
+  checkout="$1"
+fi
+
+p=$(echo $checkout | sed 's/\..*//')
+s=$(echo $checkout | sed 's/.*\.//')
+( echo $checkout | grep -q '\.' ) || s=''
+
+source /tools/Modules/init/bash
+module load tflow
+tgo -a ProSX8 -p "$p" -suffix "$s" -exec "bash -i;"

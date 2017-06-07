@@ -1,0 +1,20 @@
+#!/bin/bash
+
+cd /projects/video_ip/stevens
+
+if [ "$1" = "-list" ]
+then
+  echo */ | sed 's#/##g'
+  exit 0
+else
+  dir="$1"
+  [ "$dir" = "" ] && dir="trunk"
+  cd "$dir"
+  export W="$(pwd)"
+  export VIPROOT="$(pwd)"
+
+fi
+
+export SVN_EDITOR=vim
+
+exec $SHELL -i

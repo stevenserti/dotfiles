@@ -1,0 +1,5 @@
+.vim/.netrwhist
+.vim/plugins_by_vimplug/
+.vim/init.vim
+.vim/autoload/plug.vim.old
+.*swp

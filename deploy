@@ -20,7 +20,7 @@ deploy_core(){
   ln -sv $target $link_name
 }
 
-#deploy_core .vim
+deploy_core .vim
 deploy_core .vimrc
 deploy_core .bashrc
 deploy_core .bashrc.local
@@ -29,5 +29,5 @@ deploy_core .bash_aliases.local
 deploy_core .bash_profile
 #deploy_core .screenrc
 #deploy_core .config/htop
-#deploy_core .ctags
-#deploy_core bin
+deploy_core .ctags
+deploy_core bin
