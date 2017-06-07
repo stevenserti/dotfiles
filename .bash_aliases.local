@@ -3,27 +3,29 @@
 
 alias grepme='ps -ef | grep stevens'
 
-grepv () {
-  VAR="";
-  OPTIONS="";
-  STR="";
-  for ((i=1; i<$#; i++)) do
-    eval VAR=\$$i;
-    OPTIONS="$OPTIONS $VAR";
-  done
-  eval STR=\$$#;
-  echo "find . -path '*work*' -prune -o -path '*INCA*' -prune -o -name '*.v' -exec grep -H $OPTIONS \"$STR\" {} \;";
-  find . -path '*work*' -prune -o -path '*INCA*' -prune -o -name '*.v' -exec grep -H $OPTIONS "$STR" {} \;
-}
 
-alias ll='ls -alF'
-alias la='ls -A'
-alias lstr='ls -ltr'
-alias lsrt='ls -ltr'
-alias sltr='ls -ltr'
-alias slrt='ls -ltr'
-
-
+#xterm_autotitle()
+#{
+#  local title=""
+#
+#  local tango=$( basename ${ASIC_PROJECT_REF:-.} )
+#  [ "$tango" != "." ] && title="$title $tango"
+#
+#  local ius=$( which irun 2> /dev/null )
+#  ius="${ius/*cadence\//}"
+#  ius="${ius/\/tools*/}"
+#  [ -n "$ius" ] && title="$title $ius"
+#
+#  local talus=$( which talus 2> /dev/null )
+#  talus="${talus/*magma\//}"
+#  talus="${talus/\/*/}"
+#  [ -n "$talus" ] && title="$title $talus"
+#
+#  # at beginning
+#  xterm_title "${title## }" ""
+#  # at the end :
+#  #xterm_title "" "${title## }"
+#}
 
 alias lchkd='lmstat -a -c /tools/simulator/licenses/debussy/license.dat'
 alias lchkc='lmstat -a -c /tools/cadence/license/license.dat'
@@ -50,50 +52,17 @@ alias sosx8a2="source /users/stevens/designs/project_sx8_reva_2.bashrc"
 alias sosx8b="source /users/stevens/designs/project_sx8_revb.bashrc"
 alias sosx8b2="source /users/stevens/designs/project_sx8_revb_2.bashrc"
 alias souniona="source /users/stevens/designs/project_union_reva.bashrc"
-alias sounion2a="source /users/stevens/designs/project_union2_reva.bashrc"
 
-
-
-alias sovip="source /users/stevens/designs/project_video_ip.bashrc"
-alias sovip_dev="source /users/stevens/designs/project_video_ip_dev.bashrc"
-alias sovip_dev_hier="source /users/stevens/designs/project_video_ip_dev_hier.bashrc"
-
-alias ncq="time sigm_nc --simu --nc_args '-r+ quickrun' -- "
-alias ncsimuq="time sigm_nc --nc_args '-r+ quickrun' -- "
-alias ncn="time nc run -I -- "
-
-alias nca="time sigm_nc --nc_args '-r+ ariel -r+ pdfullchip'  -- "
-alias ncr="time sigm_nc --cpu 1 -- "
-alias ncd="time sigm_nc --nc_args '-r+ damas -r+ pdfullchip' -- "
-alias ncsynd="time sigm_nc --mem 16 --nc_args '-r+ damas -r+ pdfullchip' -- "
-alias ncs="time sigm_nc --nc_args '-r+ sattung -r+ pdfullchip' -- "
-alias ncsyns="time sigm_nc --mem 16 --nc_args '-r+ sattung -r+ pdfullchip' -- "
-alias ncsynt="time sigm_nc --mem 16 --nc_args '-r+ telesto -r+ pdfullchip' -- "
-alias ncsyndi="time sigm_nc --mem 16 --nc_args '-r+ dali -r+ pdfullchip' -- "
-
-
-#alias ncvivado="time sigm_nc --simu --nc_args '-e 'BASE+D(VOV_LIMIT_memoryuse=60G)' -r+ RAMFREE#64000 RAM/64000 -r+ vivado' -- "
 alias ncvivado="time sigm_nc --nc_args '-r+ vivado' -- "
 alias ncvivado_bigmem="time sigm_nc --nc_args '-r+ RAMFREE#60000 -r+ RAM/60000 -r+ vivado' -- "
-#alias ncvivado_bigmem="time sigm_nc --nc_args '-r+ RAMFREE#60000 -r+ RAM/60000 -r+ vivado' -- "
 nc_bigmem() {  time sigm_nc --mem 100 $@; }
-#alias nc_bigmem="time sigm_nc --nc_args '-r+ RAMFREE#80000 -r+ RAM/80000 -r+ pdfullchip' -- "
 
-alias ncsyn="time sigm_nc --mem 16 --cpu 1 --nc_args '-r+ pdfullchip' -- "
 
 alias ncsimu="time sigm_nc --simu --cpu 1 -- "
-alias ncsimup="time sigm_nc --simu --nc_args '-r+ pdfullchip' -- "
-alias ncsimug="time sigm_nc --simu --nc_args '-r+ gaea' -- "
-alias ncsimud="time sigm_nc --simu --nc_args '-r+ damas -r+ pdfullchip' -- "
-alias ncsimus="time sigm_nc --simu --nc_args '-r+ sattung -r+ pdfullchip' -- "
-alias ncsimut="time sigm_nc --simu --nc_args '-r+ telesto -r+ pdfullchip' -- "
 alias ncsimusden="time sigm_nc --simu --nc_args '-r+ sattung -r+ pdfullchip -r+ LicenseShare:US_Denali_MMAV_2008_allcards' -- "
 
 
 alias ncsimv="time sigm_nc --simvision --cpu 1 -- simvision -64BIT "
-alias ncsimvd="time sigm_nc --simvision --nc_args '-r+ damas -r+ pdfullchip' --  simvision -64BIT "
-alias ncsimvs="time sigm_nc --simvision --nc_args '-r+ sattung -r+ pdfullchip' --  simvision -64BIT "
-alias ncsimv6="time sigm_nc --simvision --nc_args '-r+ nc6' --  simvision -64BIT "
 
 alias ncbatchd="time sigm_nc --batch --nc_args '-r+ damas -r+ pdfullchip' -- "
 alias ncbatch="time sigm_nc --batch -- "
@@ -102,16 +71,11 @@ alias slog="tail -f output/verilog.log"
 alias runx='x2vnc -west -passwdfile .passwdfile 10.10.20.200:0'
 
 
-alias	sosyn="source /utils/scripts/talus.bashrc;"
-# source /utils/scripts/syn.bashrc"
 alias	soemu="source /utils/scripts/UXE.bashrc;"
 alias	soxil="source /utils/scripts/vivado_design_2015.4.bashrc;"
 alias	soxil_2016.4="source /utils/scripts/vivado_design_2016.4.bashrc;"
 alias	sosim="source /utils/scripts/IUS.bashrc; source /utils/scripts/simvision.bashrc"
 alias	sodenali="source /utils/scripts/denali.bashrc"
-alias	sosharp="source /users/stevens/designs/sharp/utils/bin/sharp.bashrc"
-alias sotekton="source /utils/scripts/tekton.2012_11_08.bashrc"
-alias	sharp_check="sharp_check_goldpath"
 alias mc_run="/tools/trident/cad/design_assist/itools/memorycompiler/auto_run_mc_SNPS28/make_snps28mc_V2.pl"
 
 alias nwave="/cad/tools/novas/201010/bin/nWave"

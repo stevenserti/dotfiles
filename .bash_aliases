@@ -10,6 +10,18 @@ if [ -x /usr/bin/dircolors ]; then
     alias grep='grep --color=auto'
 fi
 
+grepv () {
+  VAR="";
+  OPTIONS="";
+  STR="";
+  for ((i=1; i<$#; i++)) do
+    eval VAR=\$$i;
+    OPTIONS="$OPTIONS $VAR";
+  done
+  eval STR=\$$#;
+  echo "find . -path '*work*' -prune -o -path '*INCA*' -prune -o -name '*.v' -exec grep -H $OPTIONS \"$STR\" {} \;";
+  find . -path '*work*' -prune -o -path '*INCA*' -prune -o -name '*.v' -exec grep -H $OPTIONS "$STR" {} \;
+}
 
 alias ls='ls $LS_OPTIONS'
 # some more ls aliases
@@ -29,6 +41,19 @@ alias sl='ls'
 alias cd..='cd ..'
 
 
+alias ll='ls -alF'
+alias la='ls -A'
+alias lstr='ls -ltr'
+alias lsrt='ls -ltr'
+alias sltr='ls -ltr'
+alias slrt='ls -ltr'
+
+lcd(){
+\cd $1
+ls
+}
+
+
 #alias	cd='cd ${1} ; echo $PWD ; ls'
 #alias	cd='cd ${1} ; ls;'
 
@@ -39,36 +64,14 @@ alias cd..='cd ..'
 
 # function for prompt and xterm title
 
-short_prompt()
-{
-  export PS1_BACKUP=$PS1
-  export PS1=$( echo "$PS1" | sed 's/\\w/\\W/' )
-}
-alias long_prompt='export PS1=$PS1_BACKUP'
+#short_prompt()
+#{
+#  export PS1_BACKUP=$PS1
+#  export PS1=$( echo "$PS1" | sed 's/\\w/\\W/' )
+#}
+#alias long_prompt='export PS1=$PS1_BACKUP'
 
 
-xterm_autotitle()
-{
-  local title=""
-
-  local tango=$( basename ${ASIC_PROJECT_REF:-.} )
-  [ "$tango" != "." ] && title="$title $tango"
-
-  local ius=$( which irun 2> /dev/null )
-  ius="${ius/*cadence\//}"
-  ius="${ius/\/tools*/}"
-  [ -n "$ius" ] && title="$title $ius"
-
-  local talus=$( which talus 2> /dev/null )
-  talus="${talus/*magma\//}"
-  talus="${talus/\/*/}"
-  [ -n "$talus" ] && title="$title $talus"
-
-  # at beginning
-  xterm_title "${title## }" ""
-  # at the end :
-  #xterm_title "" "${title## }"
-}
 
 # execute xterm_autotitle for each prompt
 # UNCOMMENT to use it
