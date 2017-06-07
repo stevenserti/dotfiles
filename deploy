@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -e
+
+cd ~
+[ ! -d dotfiles ] && echo "ERROR: dotfiles dir must be in ~." && exit 1
+rm -rf dotfiles_bak
+mkdir dotfiles_bak
+
+deploy_core(){
+  target="$1"
+  link_name="$2"
+  [ "$link_name" = "" ] && link_name="$target"
+  target="$(readlink -m dotfiles/$target)"  # absolute path
+  if [ -e "$link_name" ] || [ -h "$link_name" ]
+  then
+    mv "$link_name" dotfiles_bak
+  fi
+  mkdir -p "$(dirname $link_name)"
+  ln -sv $target $link_name
+}
+
+#deploy_core .vim
+deploy_core .vimrc
+deploy_core .bashrc
+deploy_core .bashrc.local
+deploy_core .bash_aliases
+deploy_core .bash_aliases.local
+deploy_core .bash_profile
+#deploy_core .screenrc
+#deploy_core .config/htop
+#deploy_core .ctags
+#deploy_core bin
