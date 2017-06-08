@@ -1,10 +1,7 @@
 if [ "$DISPLAY" == "" ]
 then
-  export DISPLAY=madec-laptop:0.0
+  export DISPLAY=nc-stevens-co6:0.0
 fi
-
-# redhat's git does not have X by default
-alias vim=vimx
 
 # soft
 source /utils/em8xxx/shelldriver/bin/em8xxx_sh.env
@@ -14,12 +11,9 @@ source /utils/scripts/python.bashrc
 # git
 source /utils/scripts/git.bashrc
 # svn
-export SVN_EDITOR=vim
-
-# hard
-source /utils/scripts/verilog.bashrc
-source /utils/scripts/simvision.bashrc
+export SVN_EDITOR=vim 
 # DTV
 source /utils/scripts/svn-1.7.8.bashrc
 source /utils/scripts/svn_keyring.bashrc
-alias lpddr4='cd $W/units/umac_0/5501/source/verilog/beh/pctl/bench'
+source /tools/Modules/init/bash #Perso
+export PATH=~/my_utils:$PATH

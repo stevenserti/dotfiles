@@ -30,6 +30,9 @@ alias ls='ls $LS_OPTIONS'
 #alias  l='ls $LS_OPTIONS -CF'
 
 
+# tmux in 256 colors
+alias tmux='tmux -2'
+
 alias df='df -h'
 #alias du='du -h'
 
@@ -53,30 +56,6 @@ lcd(){
 ls
 }
 
-
-#alias	cd='cd ${1} ; echo $PWD ; ls'
-#alias	cd='cd ${1} ; ls;'
-
-#$ cdd() { cd ${1} ; echo $PWD ; ls -FC --color ; }
-#alias	cd='cdd'
-############################################################
-
-
-# function for prompt and xterm title
-
-#short_prompt()
-#{
-#  export PS1_BACKUP=$PS1
-#  export PS1=$( echo "$PS1" | sed 's/\\w/\\W/' )
-#}
-#alias long_prompt='export PS1=$PS1_BACKUP'
-
-
-
-# execute xterm_autotitle for each prompt
-# UNCOMMENT to use it
-#[ "$PROMPT_COMMAND" != "" ] &&
-#  PROMPT_COMMAND="xterm_autotitle ; $PROMPT_COMMAND"
 
 # Personal aliases
 [ -f ~/.bash_aliases.local ] && source ~/.bash_aliases.local
