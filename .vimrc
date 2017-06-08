@@ -6,13 +6,14 @@ Plug 'morhetz/gruvbox'                                                          
 if v:version >= 704
   Plug 'scrooloose/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin'                           " file navigator
 endif
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all --no-completion' }   " fuzzy search in a dir
+Plug 'junegunn/fzf.vim'                                                             " fuzzy search in a dir
+Plug 'junegunn/vim-easy-align'                                                      " easy alignement of line fields
+Plug 'vhda/verilog_systemverilog.vim'                                               " Vim Syntax Plugin for Verilog and SystemVerilog
+Plug 'vim-scripts/vcscommand.vim'                                                   " diff local CVS SVN and GIT files with current version on the server
+Plug 'vim-scripts/bufexplorer.zip'                                                  " BufExplorer Plugin for Vim (use \be)
+Plug 'PotatoesMaster/i3-vim-syntax'                                                 " i3/config highlighting
 Plug 'itchyny/lightline.vim' | Plug 'shinchu/lightline-gruvbox.vim'                         " status line
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } | Plug 'junegunn/fzf.vim' " fuzzy search in a dir
-Plug 'junegunn/vim-easy-align'                                                              " easy alignement of line fields
-Plug 'vhda/verilog_systemverilog.vim'                                                       " Vim Syntax Plugin for Verilog and SystemVerilog
-Plug 'vcscommand.vim'                                                                       " diff local CVS SVN and GIT files with current version on the server
-Plug 'bufexplorer.zip'                                                                      " BufExplorer Plugin for Vim (use \be)
-Plug 'PotatoesMaster/i3-vim-syntax' " i3/config highlighting
 call plug#end()
 
 if empty(glob("~/.vim/plugins_by_vimplug"))
@@ -67,6 +68,8 @@ nnoremap <C-]> g<C-]>
 nmap <F2> :NERDTreeToggle<CR>
 vmap <F8> :call VerilogInstance()<CR>
 nnoremap K :Man <cword> <CR>
+" get rid of trailing spaces
+nnoremap <silent> <F3> :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
 " text highlighting
 nmap <F5> :call HighlightGroup("OwnSearch0", 0)<CR>
 nmap <F6> :call HighlightGroup("OwnSearch1", 0)<CR>
