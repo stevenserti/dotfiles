@@ -136,22 +136,6 @@ PROMPT_COMMAND="fancy_prompt ; $PROMPT_COMMAND"
 #--------------------------------------------------------------
 
 #--------------------------------------------------------------
-# custom aliases
-#--------------------------------------------------------------
-# tmux in 256 colors
-alias tmux='tmux -2'
-
-# Some more alias to avoid making mistakes:
-alias rm='rm -i'
-alias cp='cp -i'
-alias mv='mv -i'
-
-## use nvim
-#if type nvim &> /dev/null
-#then
-#  alias vim='nvim'
-#fi
-#--------------------------------------------------------------
 
 # fzf: fuzzy search
 if type ag &> /dev/null; then
