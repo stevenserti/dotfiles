@@ -7,6 +7,7 @@ fi
 source /utils/em8xxx/shelldriver/bin/em8xxx_sh.env
 source /utils/gcc/3.4-mipssde-6.02/i386/bin/sdeenv.sh
 source /utils/scripts/python.bashrc
+source /utils/scripts/nc_env.bashrc
 
 # git
 source /utils/scripts/git.bashrc
