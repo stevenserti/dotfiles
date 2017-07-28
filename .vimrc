@@ -41,6 +41,7 @@ set number
 "  set numberwidth=2             " number of columns to use for the line number
 "endif
 set mouse=a                     " use mouse in all mode. Allow to resize and copy/paste without selecting text outside of the window.
+set ttymouse=xterm              " Enables mouse click on large displays past 220th column (found online SS)
 set ttyfast                     " improves smoothness of redrawing when there are multiple windows
 set tags=tags;                  " tries to locate the 'tags' file, it first looks at the current directory, then the parent directory, etc
 set title                       " change terminal title
@@ -52,6 +53,7 @@ set ignorecase smartcase        " pattern with at least one uppercase character:
 filetype plugin on              " enable loading the plugin files for specific file types
 filetype plugin indent on       " enables filetype-specific indent scripts
 runtime! ftplugin/man.vim       " allow man to be displayed in vim
+runtime macros/matchit.vim      " allows using % to match keywords like it does for {}[]
 "--------------------------------------------------------------
 
 "--------------------------------------------------------------
@@ -130,6 +132,32 @@ let NERDTreeShowHidden=1    " show hidden files in NERDTree by default
 "--------------------------------------------------------------
 
 "--------------------------------------------------------------
+" folding
+"--------------------------------------------------------------
+set foldmethod=syntax
+set foldcolumn=4
+set foldlevelstart=20
+let g:verilog_syntax_fold_lst = "all"
+
+"set foldmethod=syntax
+"set foldmethod=indent
+"set foldnestmax=8
+"set nofoldenable
+"nmap zi :call ToggleFoldEnable()<CR>
+"function! ToggleFoldEnable()
+"  let cur_foldlevel = &foldlevel
+"  set foldenable!
+"  if &foldenable
+"    execute "normal zR"
+"    let &foldcolumn = &foldlevel + 1
+"    let &foldlevel = cur_foldlevel
+"  else
+"    set foldcolumn=0
+"  endif
+"endfunction
+"--------------------------------------------------------------
+
+"--------------------------------------------------------------
 " verilog
 "--------------------------------------------------------------
 " instatiation from ports
@@ -137,6 +165,7 @@ function! VerilogInstance() range
   let cmd=a:firstline . "," . a:lastline . "!" . "~/.vim/scripts/verilog_instance.pl"
   execute cmd
 endfunction
+
 "--------------------------------------------------------------
 
 "--------------------------------------------------------------
