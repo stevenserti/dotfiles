@@ -12,6 +12,8 @@ Plug 'junegunn/vim-easy-align'                                                  
 Plug 'vhda/verilog_systemverilog.vim'                                               " Vim Syntax Plugin for Verilog and SystemVerilog
 Plug 'vim-scripts/vcscommand.vim'                                                   " diff local CVS SVN and GIT files with current version on the server
 Plug 'vim-scripts/bufexplorer.zip'                                                  " BufExplorer Plugin for Vim (use \be)
+Plug 'tpope/vim-surround'                                                           " provides mappings to easily delete, change and add such surroundings in pairs
+Plug 'tpope/vim-commentary'                                                         " comment stuff out
 Plug 'PotatoesMaster/i3-vim-syntax'                                                 " i3/config highlighting
 Plug 'itchyny/lightline.vim' | Plug 'shinchu/lightline-gruvbox.vim'                         " status line
 call plug#end()
@@ -166,6 +168,15 @@ function! VerilogInstance() range
   execute cmd
 endfunction
 
+" map '-' to 'begin end' surrounding
+autocmd FileType verilog_systemverilog let b:surround_45 = "begin \r end"
+
+" verilog_systemverilog mappings
+nnoremap <leader>i :VerilogFollowInstance<CR>
+nnoremap <leader>I :VerilogFollowPort<CR>
+
+" commentary
+autocmd FileType verilog_systemverilog setlocal commentstring=//%s
 "--------------------------------------------------------------
 
 "--------------------------------------------------------------
