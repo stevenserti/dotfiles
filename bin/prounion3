@@ -1,0 +1,30 @@
+#!/bin/tcsh
+
+
+set union3_list=`ls /project/ProUNION3/worktrees | grep stevens | sed 's/stevens.//'`
+
+set checkout=""
+if ( "$argv[1]" == "-list" ) then
+  echo "$union3_list"
+  exit 0
+else
+  set checkout="$argv[1]"
+endif
+
+set p=`echo $checkout | sed 's/\..*//'`
+set s=`echo $checkout | sed 's/.*\.//'`
+( echo $checkout | grep -q '\.' ) || set s=''
+
+setenv SVN_EDITOR vim
+source /tools/utils/cadenv/rc/sha.tcshrc
+cat << EOF
+#==============================================================
+Please source the following files if needed:
+source /utils/scripts/verilog.bashrc
+source /utils/scripts/simvision.bashrc
+source /utils/scripts/UXE.bashrc
+source /utils/scripts/Veloce.bashrc
+#==============================================================
+EOF
+module load tflow
+tgo -a ProUNION3 -p "$p" -suffix "$s"

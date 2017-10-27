@@ -62,3 +62,16 @@ _prounion2()
     return 0
 }
 complete -F _prounion2 prounion2
+
+_prounion3()
+{
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="$(prounion3 -list)"
+
+    COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+    return 0
+}
+complete -F _prounion3 prounion3
