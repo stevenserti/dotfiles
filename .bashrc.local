@@ -18,3 +18,4 @@ source /utils/scripts/svn-1.7.8.bashrc
 source /utils/scripts/svn_keyring.bashrc
 source /tools/Modules/init/bash #Perso
 export PATH=~/my_utils:$PATH
+
