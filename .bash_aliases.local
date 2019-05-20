@@ -27,71 +27,11 @@ alias grepme='ps -ef | grep stevens'
 #  #xterm_title "" "${title## }"
 #}
 
-alias lchkd='lmstat -a -c /tools/simulator/licenses/debussy/license.dat'
-alias lchkc='lmstat -a -c /tools/cadence/license/license.dat'
-alias lchka='lmstat -a'
-alias pureview='$DENALI/bin/pureview &'
-
-
-#source /tools/rtda/current/common/etc/vovrc.sh
-alias   gos="ssh -X stevens@nc-stevens"
-alias   gopina="ssh -X stevens@pinatubo.france.sdesigns.com"
-alias   gofuji="ssh -X stevens@fuji.france.sdesigns.com"
-alias   gosha="ssh -X stevens@shals-stevens.sha.sdesigns.com"
-
-alias sosha="source /tools/utils/cadenv/rc/sha.bashrc"
-
-alias so00="source /users/stevens/designs/project_tango4_branch.bashrc"
-alias so01="source /users/stevens/designs/project_tango4_branch_up.bashrc"
-
-
-alias sofrcxb="source /users/stevens/designs/project_frcx_revb.bashrc"
-alias sosx7ga="source /users/stevens/designs/project_sx7g_reva.bashrc"
-alias sosx8a="source /users/stevens/designs/project_sx8_reva.bashrc"
-alias sosx8a2="source /users/stevens/designs/project_sx8_reva_2.bashrc"
-alias sosx8b="source /users/stevens/designs/project_sx8_revb.bashrc"
-alias sosx8b2="source /users/stevens/designs/project_sx8_revb_2.bashrc"
-alias souniona="source /users/stevens/designs/project_union_reva.bashrc"
-
-alias ncvivado="time sigm_nc --nc_args '-r+ vivado' -- "
-alias ncvivado_bigmem="time sigm_nc --nc_args '-r+ RAMFREE#60000 -r+ RAM/60000 -r+ vivado' -- "
-nc_bigmem() {  time sigm_nc --mem 100 $@; }
-
-
-alias ncsimu="time sigm_nc --simu --cpu 1 -- "
-alias ncsimusden="time sigm_nc --simu --nc_args '-r+ sattung -r+ pdfullchip -r+ LicenseShare:US_Denali_MMAV_2008_allcards' -- "
-
-
-alias ncsimv="time sigm_nc --simvision --cpu 1 -- simvision -64BIT "
-
-alias ncbatchd="time sigm_nc --batch --nc_args '-r+ damas -r+ pdfullchip' -- "
-alias ncbatch="time sigm_nc --batch -- "
-
-alias slog="tail -f output/verilog.log"
-alias runx='x2vnc -west -passwdfile .passwdfile 10.10.20.200:0'
-
-
-alias	soemu="source /utils/scripts/UXE.bashrc;"
-alias	soxil="source /utils/scripts/vivado_design_2015.4.bashrc;"
-alias	soxil_2016.4="source /utils/scripts/vivado_design_2016.4.bashrc;"
-alias	sosim="source /utils/scripts/IUS.bashrc; source /utils/scripts/simvision.bashrc"
-alias	sodenali="source /utils/scripts/denali.bashrc"
-alias mc_run="/tools/trident/cad/design_assist/itools/memorycompiler/auto_run_mc_SNPS28/make_snps28mc_V2.pl"
-
-alias nwave="/cad/tools/novas/201010/bin/nWave"
-#source /utils/scripts/debussy.bashrc
-#source /utils/scripts/formality.2002.09.cshrc
-#source /utils/scripts/powertheater_2009.5.2.bashrc
-
-export videos='/media/VIT_Test_Videos'
-alias soaliases='source /users/stevens/designs/projects_aliases.bash'
-
-echo "env aliases:"
-echo ""
-echo "    > sosim     --for simulation"
-echo "    > sosyn     --for synthesis"
-echo "    > sodenali  --for denali"
-echo "    > soaliases --for project's aliases"
-
+#alias slog="tail -f output/verilog.log"
+#alias runx='x2vnc -west -passwdfile .passwdfile 10.10.20.200:0'
+#alias raptor="cd ~/Documents/git/raptor"
+#alias raptor_dev="cd ~/Documents/git/raptor_dev"
+#alias raptor_scu="cd ~/Documents/git/raptor_scu"
+alias sim="cd ~/Documents/git/simulations"
 alias vi="vim"
-alias vim="vimx"
+#alias vim="vimx"

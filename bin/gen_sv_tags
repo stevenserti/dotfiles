@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 
-/usr/bin/ctags --languages=systemverilog -R .
+/usr/bin/ctags --languages=systemverilog,altsystemverilog -R .

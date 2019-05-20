@@ -133,7 +133,7 @@ fancy_prompt () {
       local arrow="${COLOR_RED}"
   fi
   local arrow+=">"
-  git_ds_file="/tmp/git_show_dirty_state$(tty | sed 's#/#_#g')"
+  git_ds_file="/tmp/git_show_dirty_state_$(whoami)_$(tty | sed 's#/#_#g')"
   test_git_show_dirty_state_speed "$git_ds_file"
   GIT_PS1_SHOWDIRTYSTATE="$(cat $git_ds_file 2>/dev/null)"
   GIT_PS1_SHOWSTASHSTATE=true
@@ -171,7 +171,7 @@ done
 
 # cd --
 [ -f ~/bin/acd_func.sh ] && source ~/bin/acd_func.sh
-
+#
 [ -f ~/.bashrc.local ] && source ~/.bashrc.local
 [ -f ~/.bash_aliases ] && source ~/.bash_aliases
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash

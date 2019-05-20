@@ -46,8 +46,8 @@ set textwidth=0                " don't wrap words by default
 set wildmode=longest,list,full " wildchar completion mode
 set hlsearch                   " highlight search
 set expandtab                  " tab expand to space
-set tabstop=4                  " number of spaces that a <Tab> in the file counts for
-set shiftwidth=2               " number of spaces to use for each step of (auto)indent
+set tabstop=3                  " number of spaces that a <Tab> in the file counts for
+set shiftwidth=3               " number of spaces to use for each step of (auto)indent
 set lazyredraw                 " no screen redrawing while executing macros, registers etc
 "if exists("&relativenumber")
 "  set relativenumber           " show the line number relative to the line with the cursor
@@ -327,4 +327,9 @@ if has('nvim')
   command! -nargs=* T split | terminal <args>
   command! -nargs=* VT vsplit | terminal <args>
 endif
+
+augroup filetypedetect
+    au BufRead,BufNewFile *.config setfiletype perl
+    " associate *.config with perl filetype
+augroup END
 "--------------------------------------------------------------

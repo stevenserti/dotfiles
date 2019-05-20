@@ -44,7 +44,7 @@ alias sl='ls'
 alias cd..='cd ..'
 
 
-alias ll='ls -alF'
+alias ll='ls -alFt'
 alias la='ls -A'
 alias lstr='ls -ltr'
 alias lsrt='ls -ltr'

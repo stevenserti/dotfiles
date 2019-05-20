@@ -1,0 +1,20 @@
+#!/bin/bash
+
+cd /home/stevenserti_local
+
+if [ "$1" = "-list" ]
+then
+  echo */ | sed 's#/##g'
+  exit 0
+else
+  dir="$1"
+  [ "$dir" = "" ] && dir="raptor"
+  cd "$dir"
+  export rapt="$(pwd)"
+  export sdk="$(pwd)/DinoSDK"
+  source ${rapt}/verif/script/raptor.bash
+fi
+
+export SVN_EDITOR=vim
+
+exec $SHELL -i
