@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -e
+
+latest_date="$(ls -1 /opt/raptor/regression/* | grep '^20' | sort -n | tail -n 1)"
+dir="$(readlink -e /opt/raptor/regression/*/$latest_date)/sessions"
+
+cd $dir
+tests="$(grep FAIL top*.rg_report | awk '{print $4}')"
+
+cd ~/Documents/git/raptor_debug
+git updateall
+
+cd rerun_fail
+mkdir -p $latest_date
+cd $latest_date
+echo $dir > regression_dir.txt
+
+for t in $tests
+do
+  mkdir -p $t
+done
+
+cp ~/bin/debug_latest_fails_run_script run
+chmod +x run
+
+cat << EOF
+
+  # source raptor_debug
+  cd $PWD
+  ./run
+EOF

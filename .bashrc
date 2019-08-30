@@ -107,25 +107,21 @@ then
   export COLOR_WHITE="\[\033[1;37m\]"
   export COLOR_NEUTRAL="\[\033[0m\]"
 fi
-
-# test speed of __git_ps1 in background and set git_show_dirty_state file accordingly
+# test speed of __git_ps1 with different options in background
 # 200ms is the threshold; don't run it if current directory has not change
-test_git_show_dirty_state_speed() {
-  file="$1"
-  if [ "$PREVPWD" != "$PWD" ]
-  then
-    (
-    t=$( (time (GIT_PS1_SHOWDIRTYSTATE=true __git_ps1)) 2>&1 | grep real | sed -e 's/.*m//' -e 's/s//' -e 's/\.//' )
-    value="true"
-    [ "$t" -gt 200 ] && value=""
-    echo "$value" > $file
-    )& disown
-  fi
-  PREVPWD="$PWD"
+test_git_ps1_speed() {
+  local file="$1"
+  local repo="$2"
+  (
+  local status="true"
+  local t=$( (time (GIT_PS1_SHOWDIRTYSTATE=true __git_ps1)) 2>&1 | grep real | sed -e 's/.*m//' -e 's/s//' -e 's/\.//' )
+  [ "$t" -gt 200 ] && status="false"
+  echo "$repo $status" > $file
+  )& disown %-
 }
 
 fancy_prompt () {
-  return_code="$?"
+  local return_code="$?"
   if [ "$return_code" = 0 ]
   then
       local arrow="${COLOR_LIGHT_GREEN}"
@@ -133,15 +129,22 @@ fancy_prompt () {
       local arrow="${COLOR_RED}"
   fi
   local arrow+=">"
-  git_ds_file="/tmp/git_show_dirty_state_$(whoami)_$(tty | sed 's#/#_#g')"
-  test_git_show_dirty_state_speed "$git_ds_file"
-  GIT_PS1_SHOWDIRTYSTATE="$(cat $git_ds_file 2>/dev/null)"
+  local git_ds_file="/tmp/git_ps1_speed_$(whoami)_$(tty | sed 's#/#_#g')"
+  local repo="$(git rev-parse --show-toplevel 2>/dev/null)"
+  test_git_ps1_speed "$git_ds_file" "$repo"
+  local ds_status=""
+  local speed_repo="$(cat $git_ds_file   2>/dev/null | cut -d ' ' -f1)"
+  local speed_status="$(cat $git_ds_file 2>/dev/null | cut -d ' ' -f2)"
+  [ "$speed_repo" = "$repo" ] && [ "$speed_status" = "true" ] && ds_status="true"
+  GIT_PS1_SHOWDIRTYSTATE="$ds_status"
   GIT_PS1_SHOWSTASHSTATE=true
   GIT_PS1_SHOWUPSTREAM="auto"
   GIT_PS1_DESCRIBE_STYLE="branch"
   local git=$(__git_ps1 "${COLOR_NEUTRAL}on ${COLOR_LIGHT_CYAN}%s" 2> /dev/null)
+  local python_virtual_env=""
+  [ "$VIRTUAL_ENV" != "" ] && python_virtual_env="${COLOR_GRAY}($(basename "$VIRTUAL_ENV")) "
   [ "$GIT_PS1_SHOWDIRTYSTATE" = "" ] && [ "$git" != "" ] && git+=" ${COLOR_GRAY}(no-ds)"
-  export PS1="${COLOR_RED}\u${COLOR_NEUTRAL}@${HILIT}\h${COLOR_NEUTRAL}:${COLOR_YELLOW}\w ${git}${COLOR_NEUTRAL}\n$arrow${COLOR_NEUTRAL} "
+  export PS1="${python_virtual_env}${COLOR_RED}\u${COLOR_NEUTRAL}@${HILIT}\h${COLOR_NEUTRAL}:${COLOR_YELLOW}\w ${git}${COLOR_NEUTRAL}\n$arrow${COLOR_NEUTRAL} "
 }
 
 if [[ "${DISPLAY#$HOST}" != ":0.0" &&  "${DISPLAY}" != ":0" ]]; then
@@ -151,7 +154,13 @@ else
 fi
 
 # execute xterm_autotitle for each prompt
-PROMPT_COMMAND="fancy_prompt ; $PROMPT_COMMAND"
+if [ "$PROMPT_COMMAND" = "" ]
+then
+  PROMPT_COMMAND="fancy_prompt"
+else
+  PROMPT_COMMAND="fancy_prompt ; $PROMPT_COMMAND"
+fi
+
 #--------------------------------------------------------------
 
 #--------------------------------------------------------------
@@ -168,6 +177,7 @@ for file in ~/bin/completion/*
 do
   [ -f $file ] && source $file
 done
+type __git_ps1 &>/dev/null || source ~/bin/source_conditional/git_ps1
 
 # cd --
 [ -f ~/bin/acd_func.sh ] && source ~/bin/acd_func.sh

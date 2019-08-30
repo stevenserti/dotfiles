@@ -1,0 +1,41 @@
+#!/bin/bash
+
+usage(){
+cat <<EOF
+usage: $(basename $0) FILE (arg)
+
+open FILE in VIM_SERVERNAME's, with (arg) in:
+  -h    : get this help
+  -o    : open FILE in new split window instead   (default opens in focused window)
+  -O    : open FILE in new vertical split window  (default opens in focused window)
+  -p    : open FILE in new tab                    (default opens in focused window)
+EOF
+}
+
+cmd="vsp"
+while [ "$#" -gt 0 ]
+do
+  case "$1" in
+    -h) usage
+        exit 0
+        ;;
+    -o) cmd=sp
+        shift 1
+      ;;
+    -O) cmd=vsp
+        shift 1
+      ;;
+    -p) cmd=tabe
+        shift 1
+      ;;
+    *)  file="$(readlink -f $1)"
+        shift 1
+      ;;
+  esac
+done
+
+# windows bash: uses path like /c/Program Files/...
+# windows gvim: uses path like /Program Files/...
+# since windows bash Vim calls windows Gvim:
+[ "$WINDOWS_OS" = 1 ] && file="${file:2}"
+vim --servername $VIM_SERVERNAME --remote-send "<C-\><C-N>:$cmd $file<CR>"

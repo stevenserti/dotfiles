@@ -9,19 +9,10 @@
 #source /utils/scripts/python.bashrc
 #source /utils/scripts/nc_env.bashrc
 
-# git
-export GIT_EDITOR=vim
-#source /utils/scripts/git.bashrc
-# svn
-export SVN_EDITOR=vim
-# DTV
-#source /utils/scripts/svn-1.7.8.bashrc
-#source /utils/scripts/svn_keyring.bashrc
-#source /tools/Modules/init/bash #Perso
-#export PATH=~/my_utils:$PATH
 
 #Cadence
-export PATH=$PATH:/opt/cadence/installs/MDV1710/bin:/opt/cadence/installs/XCELIUM1710/tools/bin/64bit:/opt/cadence/installs/XCELIUM1710/tools/bin:/opt/cadence/installs/VXE185/bin:/opt/cadence/installs/JLS181/bin
+# Now done in raptor.bash in corresp. raptor checkout
+#export PATH=$PATH:/opt/cadence/installs/MDV1710/bin:/opt/cadence/installs/XCELIUM1710/tools/bin/64bit:/opt/cadence/installs/XCELIUM1710/tools/bin:/opt/cadence/installs/VXE185/bin:/opt/cadence/installs/JLS181/bin
 #export PATH=$PATH:/opt/cadence/installs/MDV1710/bin:/opt/cadence/installs/XCELIUM1710/tools/bin/64bit:/opt/cadence/installs/XCELIUM1710/tools/bin:/opt/cadence/installs/VXE185/bin:/opt/cadence/installs/JLS172/bin
 #export PATH=$PATH:/opt/cadence/installs/GENUS172/tools.lnx86/bin/64bit:/opt/cadence/installs/GENUS172/tools.lnx85/bin
 
@@ -35,7 +26,23 @@ export LM_LICENSE_FILE=5280@server1.dinoplus.ai
 #Xilinx
 export PATH=$PATH:/opt/Xilinx/Vivado/2017.4/bin
 
+#Locally compiled vim
+export PATH=~/src/Red_Hat_Enterprise_Linux_Server_release_7.6_Maipo/bin:${PATH}
+
+# git
+export GIT_EDITOR=vim
+#source /utils/scripts/git.bashrc
+# svn
+export SVN_EDITOR=vim
+
 #disable file indexing to eat up 100% cpu
 #if [[ $(ps -ef | grep steven | grep track | wc -l) != 0 ]]; then
 #   tracker daemon -t > /dev/null
 #fi
+
+function _raptor_ps1() {
+  [ "$SOURCE_DIR" = "" ] && return
+  export PS1="${COLOR_GRAY}[$(basename "$SOURCE_DIR")] $PS1"
+}
+
+PROMPT_COMMAND="$PROMPT_COMMAND ; _raptor_ps1"

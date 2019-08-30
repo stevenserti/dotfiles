@@ -16,5 +16,6 @@ else
 fi
 
 export SVN_EDITOR=vim
+export simdir=/opt/users/stevenserti/simulations
 
 exec $SHELL -i

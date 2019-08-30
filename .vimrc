@@ -3,10 +3,6 @@
 "--------------------------------------------------------------
 call plug#begin('~/.vim/plugins_by_vimplug')
 Plug 'morhetz/gruvbox'                                                         " colorscheme
-if v:version >= 704
-  Plug 'scrooloose/nerdtree'                                                   " file navigator
-  Plug 'Xuyuanp/nerdtree-git-plugin'
-endif
 Plug 'itchyny/lightline.vim'                                                   " status line
 Plug 'junegunn/fzf', {'dir': '~/.fzf','do': './install --all --no-completion'} " fuzzy search in a dir
 Plug 'junegunn/fzf.vim'                                                        " fuzzy search in a dir/buffers/files etc
@@ -21,9 +17,16 @@ Plug 'tpope/vim-commentary'                                                    "
 Plug 'tpope/vim-sensible'                                                      " vim defaults that (hopefully) everyone can agree on
 Plug 'tpope/vim-repeat'                                                        " remaps '.' in a way that plygubs can tap into it
 Plug 'PotatoesMaster/i3-vim-syntax', {'for': 'i3'}                             " i3/config highlighting
-if (v:version >= 704 && has('patch1578')) || has('nvim')
-  Plug 'valloric/YouCompleteMe', {'on': []}                                    " fast, as-you-type, code completion engine for Vim
+if v:version >= 800
+  Plug 'Shougo/deoplete.nvim'                                     " extensible and asynchronous completion for neovim/Vim8
 endif
+if !has('nvim')
+  Plug 'roxma/nvim-yarp'                                          " needed by deoplete
+  Plug 'roxma/vim-hug-neovim-rpc'                                 " needed by deoplete
+endif
+" filetype specific
+Plug 'davidhalter/jedi-vim', {'for': 'python'}                    " jedi completion (python)
+Plug 'zchee/deoplete-jedi', {'for': 'python'}                     " deoplete: add python support
 call plug#end()
 
 if empty(glob("~/.vim/plugins_by_vimplug"))
@@ -68,6 +71,7 @@ set ttymouse=xterm              " Enables mouse click on large displays past 220
 "--------------------------------------------------------------
 " mappings
 "--------------------------------------------------------------
+nnoremap <silent> <leader>gs    :Gstatus<CR>
 if has('nvim')
   tnoremap <Esc> <C-\><C-n>
   tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
@@ -93,10 +97,9 @@ nnoremap K :call DisplayDoc() <CR>
 nnoremap <C-]> g<C-]>
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
-nmap <F2> :NERDTreeToggle<CR>
 " get rid of trailing spaces
 nnoremap <silent> <F3> :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
-nnoremap <silent> <F4> :EnableYCM<CR>
+nnoremap <silent> <F4> :ToggleCompletion<CR>
 nnoremap <silent> <F5> :HighlightGroupsAddWord 4 0<CR>
 nnoremap <silent> <F6> :HighlightGroupsAddWord 6 0<CR>
 nnoremap <silent> <S-F5> :HighlightGroupsClearGroup 4 0<CR>
@@ -157,9 +160,6 @@ endfunction
 set t_Co=256                " vim uses more colors
 set background=dark
 colorscheme gruvbox
-
-
-let NERDTreeShowHidden=1 " show hidden files in NERDTree by default
 "--------------------------------------------------------------
 
 "--------------------------------------------------------------
@@ -242,26 +242,45 @@ endfunction
 "--------------------------------------------------------------
 " completion
 "--------------------------------------------------------------
-let g:ycm_global_ycm_extra_conf = '~/.vim/ycm/.ycm_extra_conf.py'
-let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_collect_identifiers_from_tags_files = 1
-let g:ycm_python_binary_path = 'python'
+" close preview window
+au CompleteDone * pclose
 
-command! EnableYCM call EnableYCM()
-function EnableYCM()
-  if !exists( "g:loaded_youcompleteme" )
-    call plug#load('YouCompleteMe')
-    nnoremap <leader>g :YcmCompleter GoTo<CR>
-    nnoremap <leader>pd :YcmCompleter GoToDefinition<CR>
-    nnoremap <leader>pc :YcmCompleter GoToDeclaration<CR>
-    echom "YouCompleteMe is now loaded."
+" python
+let g:deoplete#sources#jedi#python_path = 'python3'
+let g:deoplete#sources#jedi#show_docstring = 1
+let g:jedi#auto_initialization = 0
+let g:jedi#auto_vim_configuration = 0
+
+command! ToggleCompletion call ToggleCompletion()
+function ToggleCompletion()
+  if deoplete#is_enabled()
+    call deoplete#disable()
+    echom "Deoplete disabled"
+  else
+    nnoremap <leader>g :call jedi#goto()<CR>
+    " use TAB to complete
+    inoremap <silent><expr> <TAB>
+          \ pumvisible() ? "\<C-n>" :
+          \ <SID>check_back_space() ? "\<TAB>" :
+          \ deoplete#manual_complete()
+    function! s:check_back_space() abort "{{{
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~ '\s'
+    endfunction"}}}
+    call deoplete#enable()
+    echom "Deoplete enabled"
   endif
 endfunction
 
 function! DisplayDoc()
   if &filetype == "python"
-    call EnableYCM()
-    YcmCompleter GetDoc
+    let l:pydoc_stdout = system("pydoc3 " . expand('<cword>'))
+    if l:pydoc_stdout[1:32] != "o Python documentation found for"
+      Scratch | 0 put =l:pydoc_stdout | normal gg
+      set ft=man
+    endif
+  elseif &filetype == "c"
+    execute "Man 3 " . expand('<cword>')
   else
     execute "Man " . expand('<cword>')
   endif
@@ -272,7 +291,8 @@ endfunction
 " verilog
 "--------------------------------------------------------------
 " add UVM tags
-set tags+=~/.vim/tags/UVM
+autocmd FileType verilog_systemverilog setlocal tags+=~/.vim/tags/UVM_CDNS-1.2
+
 
 " map '-' to 'begin end' surrounding
 autocmd FileType verilog_systemverilog let b:surround_45 = "begin \r end"
@@ -298,6 +318,27 @@ command -nargs=* Make make <args> | cwindow 3
 "--------------------------------------------------------------
 
 "--------------------------------------------------------------
+" terminal
+"--------------------------------------------------------------
+if has('terminal')
+   tnoremap <Esc><Esc> <C-\><C-n>
+   tnoremap <leader>vim          vim_server_open
+   nnoremap <leader>tw :cd %:h<CR>:T<CR>
+   nnoremap <leader>ts :cd %:h<CR>:TS<CR>
+   nnoremap <leader>tv :cd %:h<CR>:TV<CR>
+   nnoremap <leader>tt :cd %:h<CR>:TT<CR>
+   command! T  call term_start(&shell, {"term_kill": "term", "term_finish": "close", "curwin": 1})
+   command! TS call term_start(&shell, {"term_kill": "term", "term_finish": "close"})
+   command! TV call term_start(&shell, {"term_kill": "term", "term_finish": "close", "vertical": 1})
+   command! TT tab call term_start(&shell, {"term_kill": "term", "term_finish": "close"})
+   " start vim server
+   if exists('*remote_startserver') && has('clientserver') && v:servername == ''
+      call remote_startserver('vim_server_' . getpid())
+   endif
+endif
+"--------------------------------------------------------------
+
+"--------------------------------------------------------------
 " misc
 "--------------------------------------------------------------
 " redirection of vim commands in clipboard
@@ -308,7 +349,7 @@ function! RediCmdToClipboard(cmd)
 endfunction
 
 " set ft=sh for *.bashrc files
-au BufNewFile,BufRead *.bashrc* call SetFileTypeSH("bash")
+" au BufNewFile,BufRead *.bashrc* call SetFileTypeSH("bash")
 
 " simple gvim
 set guioptions-=m "remove menu bar

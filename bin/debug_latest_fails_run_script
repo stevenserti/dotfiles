@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+cur_dir="$PWD"
+for d in *
+do
+  [ -d "$d" ] || continue
+  cd $d
+  echo "---- $d"
+  run_cmd_locally "$(cat ../regression_dir.txt)/$d" --debug --waveform
+  echo "---- finished"
+  cd $cur_dir
+done

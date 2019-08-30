@@ -34,4 +34,6 @@ alias grepme='ps -ef | grep stevens'
 #alias raptor_scu="cd ~/Documents/git/raptor_scu"
 alias sim="cd ~/Documents/git/simulations"
 alias vi="vim"
+alias cp_backup="rsync -av --exclude='backup' ../../* ."
+alias rm_but_cmd="find . ! -name 'cmd' -type f -exec rm -f {} +"
 #alias vim="vimx"
