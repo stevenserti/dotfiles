@@ -1,6 +1,7 @@
 "--------------------------------------------------------------
 " plugins
 "--------------------------------------------------------------
+let g:polyglot_disabled = ['v']
 call plug#begin('~/.vim/plugins_by_vimplug')
 Plug 'morhetz/gruvbox'                                                         " colorscheme
 Plug 'itchyny/lightline.vim'                                                   " status line
@@ -16,7 +17,7 @@ Plug 'tpope/vim-surround'                                                      "
 Plug 'tpope/vim-commentary'                                                    " comment stuff out
 Plug 'tpope/vim-sensible'                                                      " vim defaults that (hopefully) everyone can agree on
 Plug 'tpope/vim-repeat'                                                        " remaps '.' in a way that plygubs can tap into it
-Plug 'PotatoesMaster/i3-vim-syntax', {'for': 'i3'}                             " i3/config highlighting
+Plug 'sheerun/vim-polyglot', {'do': './build'}                    " a collection of language packs for Vim
 if v:version >= 800
   Plug 'Shougo/deoplete.nvim'                                     " extensible and asynchronous completion for neovim/Vim8
 endif
@@ -44,6 +45,8 @@ if has('nvim')
   set guicursor=               " fancy guiscursor feature are not working with Terminator
 end
 set nocompatible               " get rid of vi compatibility
+set cscopetag                  "
+setglobal tags-=./tags tags-=./tags; tags^=./tags;
 set nobackup                   " don't keep a backup file
 set textwidth=0                " don't wrap words by default
 set wildmode=longest,list,full " wildchar completion mode
@@ -374,3 +377,22 @@ augroup filetypedetect
     " associate *.config with perl filetype
 augroup END
 "--------------------------------------------------------------
+
+" fzf grep and preview
+command! -bang -nargs=? -complete=dir Files
+      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=* Ag
+      \ call fzf#vim#ag(<q-args>, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
+nnoremap <silent> <leader>f     :Files<CR>
+nnoremap <silent> <leader>g     :Ag<CR>
+
+aug CSV_Editing
+  au!
+  au BufRead,BufWritePost *.csv :%ArrangeColumn
+  au BufWritePre *.csv :%UnArrangeColumn
+aug end
+
+aug i3config_ft_detection
+  au!
+  au BufNewFile,BufRead ~/.config/i3/config set filetype=i3config
+aug end

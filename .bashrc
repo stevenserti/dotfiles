@@ -185,3 +185,7 @@ type __git_ps1 &>/dev/null || source ~/bin/source_conditional/git_ps1
 [ -f ~/.bashrc.local ] && source ~/.bashrc.local
 [ -f ~/.bash_aliases ] && source ~/.bash_aliases
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# expand $VAR when VAR is a directory
+shopt -s direxpand
+compopt -o nospace ls
